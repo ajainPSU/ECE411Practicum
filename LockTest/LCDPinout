@@ -1,0 +1,9 @@
+Pinout for LCD:
+VCC = 3.3V (Change to VIN since it requires 5V)
+GND = GND
+CS = GPIO Pin 13
+RST = GPIO Pin 12
+A0 = GPIO Pin 26
+SDA = GPIO Pin 23
+SCK = GPIO Pin 22
+LED = 3.3V (Do not change to Vin)
