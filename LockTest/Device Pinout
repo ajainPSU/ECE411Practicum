@@ -7,3 +7,11 @@ A0 = GPIO Pin 26
 SDA = GPIO Pin 23
 SCK = GPIO Pin 22
 LED = 3.3V (Do not change to Vin)
+
+Pinout for R307 Fingerprint Sensor:
+Red = VCC
+Black = GND
+Yellow = GND
+Blue = GND
+Green = GPIO 16
+White = GPIO 17
