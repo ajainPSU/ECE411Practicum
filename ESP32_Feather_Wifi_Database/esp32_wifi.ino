@@ -7,7 +7,7 @@ const char* ssid = "";  //--> Your WiFi SSID
 const char* password = ""; //--> Your WiFi password
 
 // Google script Web_App_URL.
-String Web_App_URL = "https://script.google.com/macros/s/AKfycbytqF0TpYdGAzkupT28Z_dLqa0AowQ0U1OURqLPlMCr2DTWuOh1swcDJyx5YwXbaERn/exec";
+String Web_App_URL = "";
 
 String temp = "";
 String Person = "";        // Name of the person
