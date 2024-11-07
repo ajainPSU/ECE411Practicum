@@ -3,8 +3,8 @@
 #include <HTTPClient.h>
 
 // SSID and PASSWORD of your WiFi network.
-const char* ssid = "Ziply-D3D0";  //--> Your WiFi SSID
-const char* password = "y2nstxpyj6yt"; //--> Your WiFi password
+const char* ssid = "";  //--> Your WiFi SSID
+const char* password = ""; //--> Your WiFi password
 
 // Google script Web_App_URL.
 String Web_App_URL = "https://script.google.com/macros/s/AKfycbytqF0TpYdGAzkupT28Z_dLqa0AowQ0U1OURqLPlMCr2DTWuOh1swcDJyx5YwXbaERn/exec";
