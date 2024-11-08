@@ -2,8 +2,8 @@
 #include <HTTPClient.h>
 
 // WiFi credentials
-const char* ssid = "Ziply-D3D0";          // WiFi network name (SSID)
-const char* password = "y2nstxpyj6yt";    // WiFi password
+const char* ssid = "";          // WiFi network name (SSID)
+const char* password = "";    // WiFi password
 
 // Google Apps Script Web App URL for data submission
 String Web_App_URL = "https://script.google.com/macros/s/AKfycbyPtgffrcH_vWvRVg7lfgtzi2gD4dBR9lcuADH_nT8BYBIeqFI0onTHR0PABtF0LlaJ/exec";
