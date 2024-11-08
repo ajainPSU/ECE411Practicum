@@ -5,6 +5,7 @@
 
    by Anthony Le
    modified 8 Nov 2024
+   Credit: https://www.youtube.com/watch?v=u7TYu61l0t4&t=144s
 */
 #include "WiFi.h"
 #include <HTTPClient.h>
