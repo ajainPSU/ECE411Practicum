@@ -1,3 +1,11 @@
+/*
+   Google Sheets to ESP32/Huzzah32 Feather
+
+   Reads from ESP32 and then stores in google sheets
+
+   by Anthony Le
+   modified 8 Nov 2024
+*/
 #include "WiFi.h"
 #include <HTTPClient.h>
 
