@@ -1,159 +1,147 @@
-// Including the libraries.
 #include "WiFi.h"
 #include <HTTPClient.h>
 
-// SSID and PASSWORD of your WiFi network.
-const char* ssid = "";  //--> Your WiFi SSID
-const char* password = ""; //--> Your WiFi password
+// WiFi credentials
+const char* ssid = "Ziply-D3D0";          // WiFi network name (SSID)
+const char* password = "y2nstxpyj6yt";    // WiFi password
 
-// Google script Web_App_URL.
-String Web_App_URL = ""; //->Ask me for web_app_url
+// Google Apps Script Web App URL for data submission
+String Web_App_URL = "https://script.google.com/macros/s/AKfycbyPtgffrcH_vWvRVg7lfgtzi2gD4dBR9lcuADH_nT8BYBIeqFI0onTHR0PABtF0LlaJ/exec";
 
-String temp = "";
-String Person = "";        // Name of the person
-String Authorization = ""; // Authorization status
-uint8_t image;             // Image ID
-int id;                    // Unique ID
+// Variables to store data
+String Person = "Bob";           // Example person name
+String Authorization = "Yes";    // Example authorization status
+int image = 5;                   // Example image ID
+int id = 2;                      // Example unique ID
 
-// GPIO pin for the onboard LED (change if different)
-#define On_Board_LED_PIN 13
+#define On_Board_LED_PIN 13      // Onboard LED pin for visual indication
 
-//________________________________________________________________________________VOID SETUP()
-void setup() {
-  Serial.begin(115200);
-  Serial.println("\nInitializing...");
+bool dataSent = false;           // Flag to track if data has been sent
 
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, password);
+// Function to gather data from user input through Serial Monitor
+void Getting_Fingerdata() {
+  // Prompt user to enter person's name
+  Serial.println("Please enter the person's name:");
+  while (Serial.available() == 0); // Wait for user input
+  Person = Serial.readStringUntil('\n');
+  Person.trim(); // Remove any newline characters
 
-  int connecting_process_timed_out = 40;
-  pinMode(On_Board_LED_PIN, OUTPUT);
+  // Prompt user to enter authorization status
+  Serial.println("Please enter the authorization status (Yes/No):");
+  while (Serial.available() == 0); // Wait for user input
+  Authorization = Serial.readStringUntil('\n');
+  Authorization.trim(); // Remove any newline characters
 
-  while (WiFi.status() != WL_CONNECTED) {
-    Serial.print(".");
-    digitalWrite(On_Board_LED_PIN, HIGH);
-    delay(250);
-    digitalWrite(On_Board_LED_PIN, LOW);
-    delay(250);
+  // Prompt user to enter image ID
+  Serial.println("Please enter the image ID (integer):");
+  while (Serial.available() == 0); // Wait for user input
+  image = Serial.parseInt(); // Read integer value
 
-    if (--connecting_process_timed_out == 0) {
-      Serial.println("\nConnection timeout, restarting...");
-      delay(1000);
-      ESP.restart();
-    }
-  }
-  digitalWrite(On_Board_LED_PIN, LOW);
-  Serial.println("\nWiFi connected!\nESP32 Is Ready!\n");
-  Serial.println("Enter ID: ");
+  // Prompt user to enter unique ID
+  Serial.println("Please enter the unique ID (integer):");
+  while (Serial.available() == 0); // Wait for user input
+  id = Serial.parseInt(); // Read integer value
+
+  // Output gathered data to Serial Monitor
+  Serial.println();
+  Serial.println("-------------");
+  Serial.print("Name : ");
+  Serial.print(Person);
+  Serial.print(" | Authorization : ");
+  Serial.print(Authorization);
+  Serial.print(" | Image : ");
+  Serial.print(image);
+  Serial.print(" | ID : ");
+  Serial.print(id);
+  Serial.println("-------------");
 }
 
-//________________________________________________________________________________VOID LOOP()
-void loop() {
+void setup() {
+  // Initialize Serial communication
+  Serial.begin(115200);
+  delay(1000);
+
+  // Configure the onboard LED as an output
+  pinMode(On_Board_LED_PIN, OUTPUT);
+
+  // Connect to Wi-Fi
+  WiFi.mode(WIFI_STA); // Set Wi-Fi to station mode
+  WiFi.begin(ssid, password); // Start connection
+  Serial.print("Connecting to WiFi");
+
+  int timeout = 40; // 20 seconds timeout (40 * 250 ms)
+  while (WiFi.status() != WL_CONNECTED && timeout > 0) {
+    delay(250);
+    Serial.print(".");
+    digitalWrite(On_Board_LED_PIN, HIGH); // Blink LED while connecting
+    delay(250);
+    digitalWrite(On_Board_LED_PIN, LOW);
+    timeout--;
+  }
+
+  // Check Wi-Fi connection status
   if (WiFi.status() == WL_CONNECTED) {
-    digitalWrite(On_Board_LED_PIN, HIGH);
-    Serial.println("Enter ID: ");
-    if (Serial.available() > 0) {
-      while (Serial.available() == 0) {} 
-      id = Serial.readStringUntil('\n').toInt();
-      Serial.println("ID: " + String(id));
+    Serial.println("\nWiFi connected");
+  } else {
+    Serial.println("\nWiFi connection failed, restarting...");
+    ESP.restart(); // Restart ESP if connection fails
+  }
+}
 
-      Serial.println("Enter Image Number: ");
-      while (Serial.available() == 0) {} 
-      image = Serial.readStringUntil('\n').toInt();
-      Serial.println("Image Number: " + String(image));
+void loop() {
+  // Check if data has already been sent
+  if (!dataSent) {
+    Getting_Fingerdata(); // Gather data from user input
 
-      Serial.println("Enter Name: ");
-      while (Serial.available() == 0) {} 
-      Person = Serial.readStringUntil('\n');
-      Serial.println("Name: " + Person);
+    // Send data if Wi-Fi is connected
+    if (WiFi.status() == WL_CONNECTED) {
+      digitalWrite(On_Board_LED_PIN, HIGH); // Turn on LED to indicate data sending
 
-      Serial.println("Enter Authorization: ");
-      while (Serial.available() == 0) {} 
-      Authorization = Serial.readStringUntil('\n');
-      Serial.println("Authorization: " + Authorization);
-
+      // Form the URL for sending data
       String Send_Data_URL = Web_App_URL + "?sts=write";
       Send_Data_URL += "&id=" + String(id);
       Send_Data_URL += "&image=" + String(image);
       Send_Data_URL += "&person=" + Person;
       Send_Data_URL += "&authorization=" + Authorization;
 
-      Serial.println("-------------");
-      Serial.println("Send data to Google Spreadsheet...");
-      Serial.print("URL : ");
+      // Output the URL to the Serial Monitor for debugging
+      Serial.println("\n-------------");
+      Serial.println("Sending data to Google Spreadsheet...");
+      Serial.print("URL: ");
       Serial.println(Send_Data_URL);
 
+      // Send the HTTP GET request
       HTTPClient http;
       http.begin(Send_Data_URL.c_str());
-      http.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS);
+      int httpCode = http.GET();
 
-      int httpCode = http.GET(); 
-      Serial.print("HTTP Status Code : ");
-      Serial.println(httpCode);
-
+      // Handle the response
       if (httpCode > 0) {
-        String payload = http.getString();
-        Serial.println("Payload : " + payload);    
+        Serial.print("HTTP Status Code: ");
+        Serial.println(httpCode);
+        String payload = http.getString(); // Read server response
+        Serial.println("Payload: " + payload);
+
+        // Set the flag to true after successful data transmission
+        dataSent = true;
+      } else {
+        Serial.print("HTTP request failed: ");
+        Serial.println(http.errorToString(httpCode).c_str());
       }
-      http.end();
 
-      digitalWrite(On_Board_LED_PIN, LOW);
+      http.end(); // Close connection
+      digitalWrite(On_Board_LED_PIN, LOW); // Turn off LED
       Serial.println("-------------");
-    }
-
-    delay(10000);
-
-    // Reading data from Google Sheets
-    digitalWrite(On_Board_LED_PIN, HIGH);
-
-    String Read_Data_URL = Web_App_URL + "?sts=read";
-    Serial.println("-------------");
-    Serial.println("Read data from Google Spreadsheet...");
-    Serial.print("URL : ");
-    Serial.println(Read_Data_URL);
-
-    HTTPClient http;
-    http.begin(Read_Data_URL.c_str());
-    int httpCode = http.GET();
-
-    Serial.print("HTTP Status Code: ");
-    Serial.println(httpCode);
-
-    if (httpCode > 0) {
-      String payload = http.getString();
-      Serial.println("Response: " + payload);
-
-      image = getValue(payload, ',', 0).toInt();
-      id = getValue(payload, ',', 1).toInt();
-      Person = getValue(payload, ',', 2);
-      Authorization = getValue(payload, ',', 3);
-      
-      Serial.println("Parsed Data:");
-      Serial.println("Image: " + String(image));
-      Serial.println("ID: " + String(id));
-      Serial.println("Person: " + Person);
-      Serial.println("Authorization: " + Authorization);
-    }
-    http.end();
-
-    digitalWrite(On_Board_LED_PIN, LOW);
-    delay(10000);
-  }
-}
-
-//________________________________________________________________________________getValue()
-// Helper function to split a string based on a delimiter
-String getValue(String data, char separator, int index) {
-  int found = 0;
-  int strIndex[] = { 0, -1 };
-  int maxIndex = data.length() - 1;
-  
-  for (int i = 0; i <= maxIndex && found <= index; i++) {
-    if (data.charAt(i) == separator || i == maxIndex) {
-      found++;
-      strIndex[0] = strIndex[1] + 1;
-      strIndex[1] = (i == maxIndex) ? i + 1 : i;
+    } else {
+      Serial.println("WiFi not connected, retrying...");
     }
   }
-  return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
+
+  // Stop execution after sending data
+  if (dataSent) {
+    Serial.println("Data sent. Stopping further execution.");
+    while (true) {
+      delay(1000); // Infinite loop to stop further execution
+    }
+  }
 }
