@@ -1,0 +1,15 @@
+Note: Change Lines 824 & 847 in MFRC522Extended.cpp to this:
+if (backData && (*backLen > 0)) {
+  // rest of code
+  }
+That file can be found in \Arduino\libraries\MFRC522\src\
+
+Pinouts follow on Huzzah32 test board:
+SDA (SS): Pin 23
+SCK: Pin 5
+MOSI: Pin 18
+MISO: Pin 19
+IRQ: Not Connected
+GND = GND
+RST = Pin 13
+VCC = 3.3V
