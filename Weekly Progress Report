@@ -1,1 +1,174 @@
-Test Test Test
+# Lockbox Week 4 Progress Report
+Week 4 Dates: 10/17/24 - 10/24/24
+Report date: 11/7/2024
+
+
+- ## Last Week (Times in Hours)
+    - Team Review
+        - This week we finalized our choice of project and completed our initial Product Design Specification sheet.
+    - Team Member 1 - Felix Moss
+        - Worked on PDS sheet L0 and L1 (2)
+    - Team Member 2 - Alex Jain
+        - Worked on market analysis, product functions, and design specifications (4)
+    - Team Member 3 - Davyd Gamza
+        - Worked on "Must", "May", and "Shall" statements (2)
+    - Team Member 4 - Anthony Le
+        - Worked on market analysis, product functions, and design specifications (4)
+- ## Next Week
+    - Team Plan
+        - Next week we create the preliminary schematic, decision matrices, and Trello board. Also will order parts for construction of breadboard prototype and code testing.
+    - Team Member 1 - Felix Moss
+        - Assist with creating decision matrices. (2)
+    - Team Member 2 - Alex Jain
+        - Assist with completing decision matrices (2)
+    - Team Member 3 - Davyd Gamza
+        - Draw preliminary schematic (1)
+    - Team Member 4 - Anthony Le
+        - Order fingerprint module and OLED screen (1)
+        - Assist with creating decision matrices (2)
+-  ## Blocked
+    - Team Member 1 - Felix Moss
+        - Waiting on final decision for solenoid lock
+        - Need to learn altium for further schematic design
+    - Team Member 2 - Alex Jain
+        - Waiting for fingerprint module to begin coding
+    - Team Member 3 - Davyd Gamza
+        - N/A
+    - Team Member 4 - Anthony Le
+        - Waiting for fingerprint module to begin coding
+        - Needs money for ordering parts from group members
+
+
+# Lockbox Week 5 Progress Report
+Week 4 Dates: 10/24/24 - 10/31/24
+Report date: 11/9/2024
+
+
+- ## Last Week (Times in Hours)
+    - Team Review
+        - Things are starting to tentatively fall into place. We are getting more organized and have a clearer path towards construction.
+        - As a team we completed the decision matrix for our locking mechanism, ordered more parts, and drew up a preliminary schematic
+        - Decided to add RFID scanner for extra complexity and security
+    - Team Member 1 - Felix Moss
+        - Helped complete decision matrices (1)
+        - Started Trello board for organizational purposes (1)
+        - Ordered parts, including RFID chip reader for added complexity and solenoid lock (1)
+    - Team Member 2 - Alex Jain
+        - Helped complete decision matrices (2)
+    - Team Member 3 - Davyd Gamza
+        - Drew preliminary schematic in KiCad (3)
+    - Team Member 4 - Anthony Le
+        - Helped complete decision matrices (1)
+- ## Next Week
+    - Team Plan
+    - Team Member 1 - Felix Moss
+        - Learn Altium for updated schematic and PCB layout (5)
+        - Complete full Gantt chart (2)
+    - Team Member 2 - Alex Jain
+        - Begin coding for fingerprint sensor and RFID chip (4)
+    - Team Member 3 - Davyd Gamza
+        - Unavailable due to midterms
+    - Team Member 4 - Anthony Le
+        - Begin coding for fingerprint sensor and RFID chip (4)
+-  ## Blocked
+    - Team Blocks
+    - Team Member 1 - Felix Moss
+        - Still need to learn Altium
+    - Team Member 2 - Alex Jain
+        - No sensors yet for coding testing
+    - Team Member 3 - Davyd Gamza
+        - No premade schematic library for solenoid lock.
+    - Team Member 4 - Anthony Le
+        - No sensors yet for coding testing
+       
+# Lockbox Week 6 Progress Report
+Week 4 Dates: 10/31/24 - 11/7/24
+Report date: 11/9/2024
+
+
+- ## Last Week (Times in Hours)
+    - Team Review
+        - This has been our most productive week by far
+        - Updated our schematic and put our components onto a PCB in Altium
+        - Created Gantt chart
+        - Completely overhauled PDS and ironed out any discrepancies
+        - Established weekly meeting time of wednesdays at 7pm
+        - Wrote working code for fingerprint sensor and live logging of sensor activity
+        - Had 2 team meetings with recorded notes
+        - Made significant design changes, i.e. using 12v source and 5v voltage regulator for the microcontroller and external components
+    - Team Member 1 - Felix Moss
+        - Created Gantt chart (2)
+        - Deisgned updated schematic (3)
+        - Put components onto PCB (2)
+        - Rewrote PDS (2)
+        - Constructed breadboard prototype (2)
+    - Team Member 2 - Alex Jain
+        - Wrote functional code for fingerprint sensor (5)
+        - Rewrote PDS (2)
+    - Team Member 3 - Davyd Gamza
+        - Rewrote PDS (2)
+    - Team Member 4 - Anthony Le
+        - Wrote functional code for fingerprint sensor (5)
+        - Rewrote PDS (2)
+- ## Next Week
+    - Team Plan
+    - Team Member 1 - Felix Moss
+        - Purchase more LM317T voltage regulators (1)
+        - Update schematic for esp32 (2)
+        - Route PCB (2)
+        - Functional Decomposition (2)
+    - Team Member 2 - Alex Jain
+        - Collab w/ Anthony to get all external devices working with esp32 via code to establish pin connections (5)
+    - Team Member 3 - Davyd Gamza
+        - Rough Draft of CAD (3)
+        - Learn TinkerCAD for 3D Printing (3)
+    - Team Member 4 - Anthony Le
+        - Collab w/ Alex to get all external devices working with esp32 via code to establish pin connections (5)
+        - Write Bill of Materials (2)
+-  ## Blocked
+    - Team Blocks
+        - Changing microcontroller, need to redo pin connections, pcb, and some code
+    - Team Member 1 - Felix Moss
+        - Waiting for updated pinouts using esp32 from Alex and Anthony
+    - Team Member 2 - Alex Jain
+        - Found out we need to change microcontrollers becuase our huzzah32 cannot control all of our things
+        - Switching to esp32
+    - Team Member 3 - Davyd Gamza
+        - Need to learn tinkercad
+    - Team Member 4 - Anthony Le
+        - Needs an esp32
+
+
+# Lockbox Week 7 Progress Report
+Week 4 Dates: 11/7/24 - 11/14/24
+Report date:
+
+
+- ## Last Week (Times in Hours)
+    - Team Review
+    - Team Member 1 - Felix Moss
+    - Team Member 2 - Alex Jain
+    - Team Member 3 - Davyd Gamza
+    - Team Member 4 - Anthony Le
+- ## Next Week
+    - Team Plan
+    - Team Member 1 - Felix Moss
+    - Team Member 2 - Alex Jain
+    - Team Member 3 - Davyd Gamza
+    - Team Member 4 - Anthony Le
+-  ## Blocked
+    - Team Blocks
+    - Team Member 1 - Felix Moss
+    - Team Member 2 - Alex Jain
+    - Team Member 3 - Davyd Gamza
+    - Team Member 4 - Anthony Le
+
+
+
+
+
+
+
+
+
+
