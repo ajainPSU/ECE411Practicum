@@ -15,7 +15,7 @@ const char* ssid = "";          // WiFi network name (SSID)
 const char* password = "";    // WiFi password
 
 // Google Apps Script Web App URL for data submission
-String Web_App_URL = "https://script.google.com/macros/s/AKfycbyPtgffrcH_vWvRVg7lfgtzi2gD4dBR9lcuADH_nT8BYBIeqFI0onTHR0PABtF0LlaJ/exec";
+String Web_App_URL = "https://script.google.com/macros/s/AKfycbxqODgmwtgdT65K4eHZ3o8GDwfrviQeMIPJLl4Rtm7evwjQbFujbmngrwrkdEOvbvwT/exec";
 
 // Variables to store data
 String Person = "Bob";           // Example person name
