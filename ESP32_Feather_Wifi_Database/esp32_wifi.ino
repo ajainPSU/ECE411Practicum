@@ -1,18 +1,9 @@
-/*
-   Google Sheets to ESP32/Huzzah32 Feather
-
-   Reads from ESP32 and then stores in google sheets
-
-   by Anthony Le
-   modified 8 Nov 2024
-   Credit: https://www.youtube.com/watch?v=u7TYu61l0t4&t=144s
-*/
 #include "WiFi.h"
 #include <HTTPClient.h>
 
 // WiFi credentials
-const char* ssid = "";          // WiFi network name (SSID)
-const char* password = "";    // WiFi password
+const char* ssid = "-Insert Wifi Name-";          // WiFi network name (SSID)
+const char* password = "-Insert Wifi Password-";    // WiFi password
 
 // Google Apps Script Web App URL for data submission
 String Web_App_URL = "https://script.google.com/macros/s/AKfycbxqODgmwtgdT65K4eHZ3o8GDwfrviQeMIPJLl4Rtm7evwjQbFujbmngrwrkdEOvbvwT/exec";
@@ -154,3 +145,126 @@ void loop() {
     }
   }
 }
+
+/*
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 04_Read_Data_from_Google_Sheets
+//----------------------------------------Including the libraries.
+
+//________________________________________________________________________________getValue()
+// String function to process the data (Split String).
+// I got this from : https://www.electroniclinic.com/reyax-lora-based-multiple-sensors-monitoring-using-arduino/
+String getValue(String data, char separator, int index) {
+  int found = 0;
+  int strIndex[] = { 0, -1 };
+  int maxIndex = data.length() - 1;
+  
+  for (int i = 0; i <= maxIndex && found <= index; i++) {
+    if (data.charAt(i) == separator || i == maxIndex) {
+      found++;
+      strIndex[0] = strIndex[1] + 1;
+      strIndex[1] = (i == maxIndex) ? i+1 : i;
+    }
+  }
+  return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
+}
+//________________________________________________________________________________ 
+
+//________________________________________________________________________________VOID LOOP()
+void loop() {
+  // put your main code here, to run repeatedly:
+
+  //----------------------------------------Conditions that are executed when WiFi is connected.
+  // This condition is the condition for reading or getting data from Google Sheets.
+  if (WiFi.status() == WL_CONNECTED) {
+    digitalWrite(On_Board_LED_PIN, HIGH);
+
+    // Create a URL for reading or getting data from Google Sheets.
+    String Read_Data_URL = Web_App_URL + "?sts=read";
+
+    Serial.println();
+    Serial.println("-------------");
+    Serial.println("Read data from Google Spreadsheet...");
+    Serial.print("URL : ");
+    Serial.println(Read_Data_URL);
+
+    //::::::::::::::::::The process of reading or getting data from Google Sheets.
+      // Initialize HTTPClient as "http".
+      HTTPClient http;
+
+      // HTTP GET Request.
+      http.begin(Read_Data_URL.c_str());
+      http.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS);
+
+      // Gets the HTTP status code.
+      int httpCode = http.GET(); 
+      Serial.print("HTTP Status Code : ");
+      Serial.println(httpCode);
+  
+      // Getting response from google sheet.
+      String payload;
+      if (httpCode > 0) {
+        payload = http.getString();
+        Serial.println("Payload : " + payload);  
+      }
+  
+      http.end();
+    //::::::::::::::::::
+    
+    digitalWrite(On_Board_LED_PIN, LOW);
+    Serial.println("-------------");
+
+    //::::::::::::::::::Conditions that are executed if reading or getting data from Google Sheets is successful (HTTP Status Codes : 200).
+    if (httpCode == 200) {
+      // The process of separating data that is read or obtained from Google Sheets.
+      Status_Read_Sensor = getValue(payload, ',', 0);
+      Temp = getValue(payload, ',', 1).toFloat();
+      Humd = getValue(payload, ',', 2).toInt();
+      Switch_1_State = getValue(payload, ',', 3);
+      Switch_2_State = getValue(payload, ',', 4);
+
+      if (Status_Read_Sensor == "Success") {
+        lcd.clear();
+        lcd.setCursor(0,0);
+        lcd.print("Temp : ");
+        lcd.print(Temp);
+        lcd.print(" ");
+        lcd.write(degree_Char_Num);
+        lcd.print("C");
+        lcd.setCursor(0,1);
+        lcd.print("Humd : ");
+        lcd.print(Humd);
+        lcd.print(" %");
+      }
+      if (Status_Read_Sensor == "Failed") {
+        lcd.clear();
+        lcd.setCursor(0,0);
+        lcd.print("Temp : Err");
+        lcd.setCursor(0,1);
+        lcd.print("Humd : Err");
+      }
+
+      if (Switch_1_State == "On") digitalWrite(LED_1_PIN, HIGH);
+      if (Switch_1_State == "Off") digitalWrite(LED_1_PIN, LOW);
+      if (Switch_2_State == "On") digitalWrite(LED_2_PIN, HIGH);
+      if (Switch_2_State == "Off") digitalWrite(LED_2_PIN, LOW);
+    } else {
+      lcd.clear();
+      lcd.setCursor(0,0);
+      lcd.print("Failed to");
+      lcd.setCursor(0,1);
+      lcd.print("get data !");
+      delay(2000);
+      lcd.clear();
+      lcd.setCursor(0,0);
+      lcd.print("Please wait to");
+      lcd.setCursor(0,1);
+      lcd.print("get data again.");
+    }
+    //::::::::::::::::::
+  }
+  //----------------------------------------
+  
+  delay(10000);
+}
+*/
+
