@@ -1,2 +1,3 @@
 # ECE411Practicum
-(Will edit later - For Team 12)
+Team 12 - Felix Moss, Davyd Gamza, Alex Jain, Anthony Le
+Project - Fingerprint + RFID Lockbox
