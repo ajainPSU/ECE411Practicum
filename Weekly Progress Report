@@ -141,27 +141,50 @@ Report date: 11/9/2024
 
 # Lockbox Week 7 Progress Report
 Week 4 Dates: 11/7/24 - 11/14/24
-Report date:
+Report date: 11/13/24
 
 
 - ## Last Week (Times in Hours)
     - Team Review
+        - Lots of progress made with coding the RFID and Fingerprint scanner, preliminary pinout has been made, very close to finishing
+        - Schematic and PCB has been updated to reflect new pinouts
+        - 3D printed box has been designed and printed by Davyd
+        - Bill of materials created
+        - L0 and L1 finalized
+        - Rough draft of cad turned in
+        - Updated Git
     - Team Member 1 - Felix Moss
+        - L0 and L1 (1)
+        - Rough Draft of CAD (4)
     - Team Member 2 - Alex Jain
+        - RFID and Fingerprint Codework (4)
     - Team Member 3 - Davyd Gamza
+        - 3D Printed box design and printing (5)
     - Team Member 4 - Anthony Le
+        - RFID and Fingerprint Codework (4)
 - ## Next Week
     - Team Plan
+        - Continue working on code and finalizing pinouts for final PCB
+        - Establish team and time for design review
+        - Finish exterior 
     - Team Member 1 - Felix Moss
+        - Finalize PCB design (6)
     - Team Member 2 - Alex Jain
+        - Continue refining code for final design (4)
     - Team Member 3 - Davyd Gamza
+        - Finalize lockbox design (3)
     - Team Member 4 - Anthony Le
+        - Continue refining code for final design (4)
 -  ## Blocked
     - Team Blocks
     - Team Member 1 - Felix Moss
+        - Needed pinouts for PCB design
     - Team Member 2 - Alex Jain
+        - N/A
     - Team Member 3 - Davyd Gamza
+        - N/A
     - Team Member 4 - Anthony Le
+        - Needed WROOM for testing
 
 
 
