@@ -1,20 +1,20 @@
 Team 12 Design Review (Inclass)
-Version and date are good
-Use 5V symbol for vcc (instead of lines)
-Add connector symbol to 12V input
-Side note, add the the schematic first then to the PCB
-Label connections instead of lines “UR OUT” “UR TX”
-Power to esp ->critical to function-> add capacitors to ground
-Add bypass capacitors to multiple locations as needed
+Version and date are good ✔️
+Use 5V symbol for vcc (instead of lines) ✔️
+Add connector symbol to 12V input ✔️
+Side note, add the the schematic first then to the PCB ✔️
+Label connections instead of lines “UR OUT” “UR TX” ✔️
+Power to esp ->critical to function-> add capacitors to ground ✔️
+Add bypass capacitors to multiple locations as needed ✔️
 I^2C missing 4.7k Ohm resistors-> add in physical pull up resistors, don't use software
-3.3V add symbol and label for where power comes from, don’t use lines
-SDA TO SDK add test points
-Add test points as needed
-Relay-> will relay click at 3.3V? (GPIO 32), if not use smaller relay that will click sooner or use the 5 volt rail and try click it ->critical issue-> add snubber diode-> reverse bias parallel with the coil
-Use ground symbol instead of wires
+3.3V add symbol and label for where power comes from, don’t use lines ✔️
+SDA TO SDK add test points ✔️
+Add test points as needed ✔️
+Relay-> will relay click at 3.3V? (GPIO 32), if not use smaller relay that will click sooner or use the 5 volt rail and try click it ->critical issue-> add snubber diode-> reverse bias parallel with the coil ✔️
+Use ground symbol instead of wires ✔️
 Add led’s for heartbeat monitoring and for testing
-Add test points to schematic and pcb
-Use test point diameter .1” or 1mm holes
-C1 & C2 check floating pins, no pins should be floating-> if floating make it go to a test point->
-Add stitching-> ground to vias
-Use thick wires 10, 20, 30 mm
+Add test points to schematic ✔️ and pcb
+Use test point diameter .1” or 1mm holes 
+C1 & C2 check floating pins, no pins should be floating-> if floating make it go to a test point-> ✔️
+Add stitching-> ground to vias ✔️
+Use thick wires 10, 20, 30 mm ✔️
