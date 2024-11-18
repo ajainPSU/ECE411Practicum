@@ -1,1 +1,20 @@
-Team 8 Design Review Notes
+## Team 8 (Eric Sanman and Chuong Vo) Design Review of Team 12   
+
+# Schematic
+- Pull-up resistors for I2C connections
+- Move power input to left side of schematic
+- Add 0.1uF from 12v input to gnd
+- Add box around regulator and other circuit areas for explanation
+- Add resistors to high current pin connections
+
+
+# PCB
+- Keep traces away from edges of board, DRC compliant
+- Use ground planes better
+- 2.54mm between pins 
+- Use 0805 size resistors,  label them on pcb
+- Make pcb larger
+- Make power traces larger
+
+# Overall
+- Add broken component warning
