@@ -151,7 +151,7 @@ void loop() {
     delay(1000);
   } else {
     tft.fillScreen(GREEN);
-    tft.print(" ID\n Found: ");
+    tft.print(" ID\n Found:\n ");
     tft.println(id);
     delay(1000);
   }
