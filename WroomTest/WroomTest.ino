@@ -10,7 +10,7 @@
   - Used ESP32 Library and ESP32 Dev Module as board
  */
 
-#define LED_BUILTIN 2
+#define LED_BUILTIN 2 // Replace to whatever the onboard LED Pin is
 
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
@@ -18,7 +18,9 @@ void setup() {
 
 void loop() {
   digitalWrite(LED_BUILTIN, HIGH);
+  Serial.println("LED ON");
   delay(500);
   digitalWrite(LED_BUILTIN,LOW);
+  Serial.println("LED OFF");
   delay(500);
 }
