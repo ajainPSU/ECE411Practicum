@@ -32,6 +32,7 @@ void displayAllFingerprints();
 int getFingerprintIDez();
 uint8_t getFingerprintEnroll();
 uint8_t readnumber(void);
+void flushSerialInput();
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 // SETUP
@@ -67,8 +68,11 @@ void setup() {
 ////////////////////////////////////////////////////////////////////////////////////////////
 // MAIN LOOP
 void loop() {
+  flushSerialInput(); // Clear the Serial input buffer before displaying the menu
+
   controlLEDs(); // Control LEDs to indicate status
   delay(1000);
+
   // Display the menu
   Serial.println("\nMenu:");
   Serial.println("1: Enroll Fingerprint");
@@ -78,13 +82,14 @@ void loop() {
   Serial.println("5: Display All Fingerprints");
   Serial.println("6: Exit");
   Serial.print("Choose an option: ");
-  
-  while (!Serial.available()); // Wait for user input
-  delay(1000);
-  char option = Serial.read(); // Read user input
+
+  // Wait for user input and read the input option
+  while (!Serial.available());
+  char option = Serial.read();
+  flushSerialInput(); // Clear any extra characters from input buffer
   Serial.println("\nOption chosen is: ");
   Serial.println(option);
-  Serial.println("\n");
+  Serial.println();
 
   switch (option) {
     case '1':
@@ -122,6 +127,13 @@ void loop() {
 ////////////////////////////////////////////////////////////////////////////////////////////
 // FUNCTIONS
 
+// Function to flush the Serial input buffer
+void flushSerialInput() {
+  while (Serial.available() > 0) {
+    Serial.read(); // Read and discard any data in the buffer
+  }
+}
+
 // Control LED indicators
 void controlLEDs() {
   // LED fully on
@@ -157,6 +169,7 @@ void enrollFingerprint() {
 
   while (!getFingerprintEnroll());
   Serial.println("Finger Enrollment Finished!");
+  return;
 }
 
 // Function to verify a fingerprint
@@ -274,43 +287,47 @@ uint8_t getFingerprintEnroll() {
   // Step 2: Wait for second image
   Serial.println("Remove finger and place it again...");
   delay(2000);
-  while ((p = finger.getImage()) != FINGERPRINT_NOFINGER);
+  while (p != FINGERPRINT_NOFINGER) {
+    p = finger.getImage();  // Wait until no finger is detected
+  }
+  delay(2000);
 
-  Serial.println("Place the same finger again...");
+  // Step 3: Second finger scan
+  Serial.println("Place the same finger again.");
   while (p != FINGERPRINT_OK) {
     p = finger.getImage();
     if (p == FINGERPRINT_NOFINGER) {
-      delay(100); // Wait and retry
-      if (millis() - startMillis > timeout) {  // Timeout check
-        Serial.println("Timeout! No second finger detected.");
-        return -1;  // Timeout occurred
+      delay(100);
+      if (millis() - startMillis > timeout) {
+        Serial.println("Timeout! No finger detected.");
+        return -1;
       }
       continue;
     } else if (p == FINGERPRINT_OK) {
-      Serial.println("Image captured.");
+      Serial.println("\nImage captured.");
     } else {
       Serial.println("Error capturing image.");
       return p;
     }
   }
 
-  p = finger.image2Tz(2);
-  if (p != FINGERPRINT_OK) {
-    Serial.println("Failed to convert second image to template.");
-    return p;
+  // Convert and store the print template
+  if (finger.image2Tz(2) != FINGERPRINT_OK) {
+    Serial.println("Failed to convert second image.");
+    return -1;
   }
 
-  // Step 3: Create and store the model
+  // Create a model
   if (finger.createModel() != FINGERPRINT_OK) {
     Serial.println("Failed to create fingerprint model.");
     return -1;
   }
 
-  if (finger.storeModel(id) == FINGERPRINT_OK) {
-    Serial.println("Fingerprint enrolled successfully.");
-    return FINGERPRINT_OK;
-  } else {
-    Serial.println("Failed to store fingerprint.");
+  // Store the model
+  if (finger.storeModel(id) != FINGERPRINT_OK) {
+    Serial.println("Failed to store fingerprint model.");
     return -1;
   }
+
+  return FINGERPRINT_OK;
 }
