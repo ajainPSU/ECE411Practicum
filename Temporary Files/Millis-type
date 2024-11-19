@@ -1,0 +1,71 @@
+#include <SPI.h>
+#include <MFRC522.h>
+
+#define SS_PIN    5  // GPIO PIN-5  (Pin 34)
+#define RST_PIN   3  // GPIO PIN-16 (Pin 25)
+#define RELAY_PIN 32 // Connect PIN32 to Relay (Pin 12)
+
+MFRC522 rfid(SS_PIN, RST_PIN);
+
+byte keyTagUID[4] = {0xF3, 0x88, 0x17, 0x2A};  // UID for the authorized card
+
+// Variables for non-blocking relay control
+unsigned long previousMillis = 0;
+const long unlockDuration = 2000;  // Time to keep the relay unlocked (in milliseconds)
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println("Setting Up now!");
+  delay(500);  // Setup Delay
+
+  SPI.begin();  // Initialize SPI bus
+  rfid.PCD_Init();  // Initialize MFRC522 RFID reader
+  pinMode(RELAY_PIN, OUTPUT);  // Initialize relay pin as output
+  digitalWrite(RELAY_PIN, LOW);  // Start with the lock engaged (relay off)
+
+  Serial.println("Program is Live");
+}
+
+void loop() {
+  unsigned long currentMillis = millis();  // Track the time in the loop
+
+  // 1. Check if a new card is detected
+  if (rfid.PICC_IsNewCardPresent()) {
+    Serial.println("New card detected");
+    if (rfid.PICC_ReadCardSerial()) {
+      // 2. Check if the UID of the card matches the authorized key
+      Serial.print("UID of the card: ");
+      for (int i = 0; i < rfid.uid.size; i++) {
+        Serial.print(rfid.uid.uidByte[i] < 0x10 ? " 0" : " ");
+        Serial.print(rfid.uid.uidByte[i], HEX);
+      }
+      Serial.println();
+
+      if (rfid.uid.uidByte[0] == keyTagUID[0] &&
+          rfid.uid.uidByte[1] == keyTagUID[1] &&
+          rfid.uid.uidByte[2] == keyTagUID[2] &&
+          rfid.uid.uidByte[3] == keyTagUID[3]) {
+        // Access granted - Unlock relay
+        Serial.println("Access granted, unlocking relay");
+        digitalWrite(RELAY_PIN, HIGH);  // Unlock the relay
+        previousMillis = currentMillis;  // Reset the timer when the relay is unlocked
+      } else {
+        // Access denied - Log the denied UID
+        Serial.println("Access denied");
+      }
+
+      // 3. Halt the card communication
+      rfid.PICC_HaltA();
+      rfid.PCD_StopCrypto1();  // Stop encryption on PCD
+    }
+  }
+
+  // 4. Non-blocking check to lock the relay after the unlock duration
+  if (currentMillis - previousMillis >= unlockDuration) {
+    Serial.println("Locking relay");
+    digitalWrite(RELAY_PIN, LOW);  // Lock the relay after the specified duration
+  }
+
+  // Optional: Add a small delay to help the serial monitor update smoothly
+  delay(10);
+}
