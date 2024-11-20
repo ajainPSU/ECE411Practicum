@@ -45,7 +45,7 @@ Note: Ensure all pin connections match the pin definitions in the code.
 #define RELAY_PIN 32 // Relay to control lock mechanism as GPIO 32
 
 // Unlock duration in seconds
-#define UNLOCK_TIME 5
+#define UNLOCK_TIME 2
 
 // RFID Tag UID (Replace with your own)
 byte keyTagUID[4] = {0x39, 0xFB, 0xFF, 0x00};
@@ -240,8 +240,8 @@ void unlockDoor() {
   digitalWrite(RELAY_PIN, HIGH); // Unlock the door
   // Displays message opening 
   delay(2000);
-  tft.fillScreen(BLACK);
   tft.println(" Unlocking \n ");
+  tft.fillScreen(BLACK);
   delay(UNLOCK_TIME * 1000);    // Keep unlocked for the set duration
   digitalWrite(RELAY_PIN, LOW); // Relock the door
 }
