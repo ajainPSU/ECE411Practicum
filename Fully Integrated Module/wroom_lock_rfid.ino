@@ -118,7 +118,8 @@ void setup() {
   tft.setCursor(10, 30);
   tft.println("Initializing");
   tft.setCursor(10, 50);
-  tft.println(" Fingerprint Sensor...");
+  tft.println("Fingerprint Sensor...");
+  delay(1000);
 
   // Just for fun if we can get it to work
   // Draw the fingerprint image (use a 128x128 bitmap)
@@ -170,11 +171,11 @@ void loop() {
       // RFID verified, prompt for fingerprint
       tft.fillScreen(GREEN);
       tft.setCursor(0, 0);
-      tft.println(" \n RFID OK\n ");
+      tft.println(" \n\n RFID \n Valid\n ");
       delay(2000);
       tft.fillScreen(BLACK);
       tft.setCursor(0, 0);
-      tft.println(" \n Place\n Finger\n ");
+      tft.println(" \n\n Place\n Finger\n ");
       
       // Step 2: Scan fingerprint
       int id = getFingerprintID();
@@ -182,7 +183,7 @@ void loop() {
         // Fingerprint matched, grant access
         tft.fillScreen(GREEN);
         tft.setCursor(0, 0);
-        tft.print(" \n Access\n Granted\n ID: ");
+        tft.print(" \n\n Access\n Granted\n ID: ");
         tft.println(id);
         
         // Unlock for the defined duration
@@ -191,14 +192,14 @@ void loop() {
         // Fingerprint mismatch
         tft.fillScreen(RED);
         tft.setCursor(0, 0);
-        tft.println(" \n Finger\n No Match");
+        tft.println(" \n\n Finger\n No Match");
         delay(2000);
       }
     } else {
       // RFID mismatch
       tft.fillScreen(RED);
       tft.setCursor(0, 0);
-      tft.println(" \n RFID\n Denied");
+      tft.println(" \n\n RFID\n Denied");
       delay(2000);
     }
     rfid.PICC_HaltA();
@@ -240,9 +241,7 @@ void unlockDoor() {
   // Displays message opening 
   delay(2000);
   tft.fillScreen(BLACK);
-  tft.setCursor(0, 0);
-  tft.println(" \n Unlocking For \n");
-  tft.println(UNLOCK_TIME + "sec. \n");
+  tft.println(" Unlocking \n ");
   delay(UNLOCK_TIME * 1000);    // Keep unlocked for the set duration
   digitalWrite(RELAY_PIN, LOW); // Relock the door
 }
