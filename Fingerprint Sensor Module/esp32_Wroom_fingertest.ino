@@ -1,4 +1,4 @@
-/* 
+/*
 ESP32 (Wroom)
 Checks fingerprint from enrollment and other options
 Author: Anthony Le <anthle@pdx.edu>
@@ -167,9 +167,15 @@ void enrollFingerprint() {
   Serial.print("Enrolling ID #");
   Serial.println(id);
 
-  while (!getFingerprintEnroll());
-  Serial.println("Finger Enrollment Finished!");
-  return;
+  for (int retries = 0; retries < 3; retries++) {
+    if (getFingerprintEnroll() == FINGERPRINT_OK) {
+      Serial.println("Fingerprint enrollment successful!");
+      return;
+    } else {
+      Serial.println("Retrying enrollment...");
+    }
+  }
+  Serial.println("Failed to enroll fingerprint after multiple attempts.");
 }
 
 // Function to verify a fingerprint
@@ -262,72 +268,84 @@ uint8_t getFingerprintEnroll() {
   int p = -1;
   unsigned long startMillis = millis();  // Start a timer
   unsigned long timeout = 30000;  // 30 seconds timeout
+  int retryCount = 0;
+  int maxRetries = 3; // Limit retries to prevent infinite loops
 
-  // Step 1: Capture first image
-  Serial.print("Waiting for valid finger to enroll as #");
-  Serial.println(id);
+  while (retryCount < maxRetries) {
+    // Step 1: Capture the first image
+    Serial.print("Waiting for valid finger to enroll as ID #");
+    Serial.println(id);
 
-  while (p != FINGERPRINT_OK) {
-    p = finger.getImage();
-    if (p == FINGERPRINT_NOFINGER) {
-      delay(100); // Wait a bit and retry
-      if (millis() - startMillis > timeout) {  // Timeout check
-        Serial.println("Timeout! No finger detected.");
-        return -1;  // Timeout occurred
+    while (true) {
+      p = finger.getImage();
+      if (p == FINGERPRINT_NOFINGER) {
+        if (millis() - startMillis > timeout) {
+          Serial.println("Timeout! No finger detected during the first scan.");
+          return -1;
+        }
+        delay(100); // Wait a bit and retry
+        continue;   // Keep polling
+      } else if (p == FINGERPRINT_OK) {
+        Serial.println("Image captured.");
+        break;
+      } else {
+        Serial.println("Error capturing image.");
+        return -1; // Exit on an unexpected error
       }
-      continue;
-    } else if (p == FINGERPRINT_OK) {
-      Serial.println("\nImage captured.");
-    } else {
-      Serial.println("Error capturing image.");
-      return p;
     }
-  }
 
-  // Step 2: Wait for second image
-  Serial.println("Remove finger and place it again...");
-  delay(2000);
-  while (p != FINGERPRINT_NOFINGER) {
-    p = finger.getImage();  // Wait until no finger is detected
-  }
-  delay(2000);
+    // Step 2: Convert image to template
+    p = finger.image2Tz();
+    if (p != FINGERPRINT_OK) {
+      Serial.println("Failed to convert image.");
+      return -1;
+    }
 
-  // Step 3: Second finger scan
-  Serial.println("Place the same finger again.");
-  while (p != FINGERPRINT_OK) {
-    p = finger.getImage();
-    if (p == FINGERPRINT_NOFINGER) {
-      delay(100);
-      if (millis() - startMillis > timeout) {
-        Serial.println("Timeout! No finger detected.");
+    // Step 3: Capture second image for comparison
+    Serial.println("Place the same finger again.");
+    startMillis = millis(); // Reset timeout timer
+    while (true) {
+      p = finger.getImage();
+      if (p == FINGERPRINT_NOFINGER) {
+        if (millis() - startMillis > timeout) {
+          Serial.println("Timeout! No finger detected during the second scan.");
+          return -1;
+        }
+        delay(100);
+        continue; // Keep polling
+      } else if (p == FINGERPRINT_OK) {
+        Serial.println("Second image captured.");
+        break;
+      } else {
+        Serial.println("Error capturing second image.");
         return -1;
       }
-      continue;
-    } else if (p == FINGERPRINT_OK) {
-      Serial.println("\nImage captured.");
+    }
+
+    // Step 4: Convert second image to template
+    p = finger.image2Tz(1);
+    if (p != FINGERPRINT_OK) {
+      Serial.println("Failed to convert second image.");
+      return -1;
+    }
+
+    // Step 5: Create model and check for enrollment success
+    p = finger.createModel();
+    if (p == FINGERPRINT_OK) {
+      Serial.println("Enrollment successful!");
+      p = finger.storeModel(id);
+      if (p == FINGERPRINT_OK) {
+        return FINGERPRINT_OK;
+      } else {
+        Serial.println("Failed to store model.");
+        return -1;
+      }
     } else {
-      Serial.println("Error capturing image.");
-      return p;
+      Serial.println("Model creation failed.");
+      retryCount++;
     }
   }
 
-  // Convert and store the print template
-  if (finger.image2Tz(2) != FINGERPRINT_OK) {
-    Serial.println("Failed to convert second image.");
-    return -1;
-  }
-
-  // Create a model
-  if (finger.createModel() != FINGERPRINT_OK) {
-    Serial.println("Failed to create fingerprint model.");
-    return -1;
-  }
-
-  // Store the model
-  if (finger.storeModel(id) != FINGERPRINT_OK) {
-    Serial.println("Failed to store fingerprint model.");
-    return -1;
-  }
-
-  return FINGERPRINT_OK;
+  Serial.println("Failed to enroll fingerprint after multiple attempts.");
+  return -1; // Exit if retries exceeded
 }
