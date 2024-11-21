@@ -10,7 +10,6 @@
 
 This repository contains code and resources for the **Fingerprint + RFID Lockbox** project developed as part of the ECE 411 practicum. The project utilizes an **ESP32 Wroom** microcontroller to integrate fingerprint and RFID authentication for a secure lockbox system. The system is capable of reading RFID tags and verifying fingerprints to grant or deny access, with an optional relay mechanism to unlock the box.
 
-Note* ESP32_Feather_Wifi_Database No Longer Needed
 ---
 
 ### Key Features:
