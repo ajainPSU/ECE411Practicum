@@ -51,6 +51,7 @@ Note: Ensure all pin connections match the pin definitions in the code.
 byte keyTagUID[4] = {0x39, 0xFB, 0xFF, 0x00};
 
 // Color definitions for TFT
+// Define color in 16-bit RGB format
 #define BLACK   0x0000
 #define BLUE    0x001F
 #define RED     0xF800
@@ -85,7 +86,7 @@ void setup() {
   // Initialize serial communication
   Serial.begin(115200);
   mySerial.begin(57600, SERIAL_8N1, RX_PIN, TX_PIN);
-
+  Serial.print("Initializing Display...\n");
   // Initialize TFT display
   tft.begin();
   tft.setRotation(2); // Adjust rotation for your specific setup
@@ -94,6 +95,7 @@ void setup() {
   tft.setTextSize(1);
   tft.setCursor(0, 0);
 
+  Serial.print("Initializing System...\n");
   // Boot-up message with animation
   for (int i = 1; i <= 3; i++) {
     tft.fillScreen(BLACK); // Clear the screen for each frame
@@ -102,16 +104,17 @@ void setup() {
 
     // Add dots based on the current iteration
     if (i == 1) {
-      tft.println(" System.");
+      tft.println("  System.");
     } else if (i == 2) {
-      tft.println(" System..");
+      tft.println("  System..");
     } else if (i == 3) {
-      tft.println(" System...");
+      tft.println("  System...");
     }
     delay(1000); // Wait for 1 second per frame
   }
   delay(1000); // Additional delay before moving on
 
+  Serial.print("Initializing RFID/Finger Sensor...\n");
   // Initialize RFID reader
   SPI.begin();
   rfid.PCD_Init();
@@ -120,7 +123,7 @@ void setup() {
   for (int i = 1; i <= 3; i++) {
     tft.fillScreen(BLACK); // Clear the screen for each frame
     tft.setCursor(10, 30);
-    tft.println("Fingerprint Sensor\n\n And RFID Scanner");
+    tft.println("Fingerprint Sensor\n\n  And RFID Scanner");
 
     // Add dots based on the current iteration
     if (i == 1) {
@@ -154,6 +157,7 @@ void setup() {
   tft.println(" \n\n Access\n Control\n System");
   delay(2000);
 
+  Serial.print("Finger Sensor Ready...\n");
   // Initialize fingerprint sensor
   if (finger.verifyPassword()) {
     tft.fillScreen(BLACK);
@@ -175,6 +179,7 @@ void loop() {
   tft.fillScreen(BLACK);
   tft.setCursor(0, 0);
   tft.println(" \n\n Scan\n RFID...");
+  Serial.print("RFID Ready...\n");
   if (rfid.PICC_IsNewCardPresent() && rfid.PICC_ReadCardSerial()) {
     if (verifyRFID()) {
       // RFID verified, prompt for fingerprint
@@ -187,10 +192,11 @@ void loop() {
         Serial.print(rfid.uid.uidByte[i], HEX);
       }
       Serial.println();
+      Serial.print("Waiting for fingerprint");
       delay(2000);
       tft.fillScreen(BLACK);
       tft.setCursor(0, 0);
-      tft.println(" \n\n Place\n Finger\n ");
+      tft.println(" \n\n  Place\n  Finger\n ");
       
       // Step 2: Scan fingerprint
       int id = getFingerprintID();
@@ -259,17 +265,23 @@ int getFingerprintID() {
 
 void unlockDoor() {
    // Unlock animation
-  Serial.println("Unlocking door...");
+  Serial.println(" Unlocking door...");
   for (int i = 1; i <= 3; i++) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 30);
-    tft.print("Unlocking");
+    tft.print("Unlocking\n");
     for (int j = 0; j < i; j++) tft.print(".");
-    Serial.print("Unlocking");
+    Serial.print("Unlocking\n");
     for (int j = 0; j < i; j++) Serial.print(".");
     Serial.println();
     delay(500);
   }
+  Serial.println(" Door unlocked.");
+  tft.fillScreen(GREEN);
+  tft.setCursor(0, 0);
+  tft.println(" \n\n Door\n Unlocked");
+  Serial.println(" Door Unlocked.");
+  delay(2000);
   digitalWrite(RELAY_PIN, HIGH); // Unlock the door
   delay(UNLOCK_TIME * 1000);    // Keep unlocked for the set duration
   
@@ -278,18 +290,18 @@ void unlockDoor() {
   for (int i = 1; i <= 3; i++) {
     tft.fillScreen(BLACK);
     tft.setCursor(10, 30);
-    tft.print("Locking");
+    tft.print("Locking\n");
     for (int j = 0; j < i; j++) tft.print(".");
-    Serial.print("Locking");
+    //Serial.print(" Locking");
     for (int j = 0; j < i; j++) Serial.print(".");
     Serial.println();
     delay(500);
   }
   digitalWrite(RELAY_PIN, LOW); // Relock the door
-
+  delay(2000);
   tft.fillScreen(RED);
   tft.setCursor(0, 0);
   tft.println(" \n\n Door\n Locked");
-  Serial.println("Door locked.");
+  Serial.println(" Door locked.");
   delay(2000);
 }
