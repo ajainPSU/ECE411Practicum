@@ -45,7 +45,7 @@ Note: Ensure all pin connections match the pin definitions in the code.
 #define RELAY_PIN 32 // Relay to control lock mechanism as GPIO 32
 
 // Unlock duration in seconds
-#define UNLOCK_TIME 2
+#define UNLOCK_TIME 5
 
 // RFID Tag UID (Replace with your own)
 byte keyTagUID[4] = {0x39, 0xFB, 0xFF, 0x00};
@@ -192,7 +192,7 @@ void loop() {
         Serial.print(rfid.uid.uidByte[i], HEX);
       }
       Serial.println();
-      Serial.print("Waiting for fingerprint");
+      Serial.print("Waiting for fingerprint\n");
       delay(2000);
       tft.fillScreen(BLACK);
       tft.setCursor(0, 0);
@@ -206,7 +206,7 @@ void loop() {
         tft.setCursor(0, 0);
         tft.print(" \n\n Access\n Granted\n ID: ");
         tft.println(id);
-        
+        delay(2000);
         // Unlock for the defined duration
         unlockDoor();
       } else {
@@ -264,44 +264,27 @@ int getFingerprintID() {
 }
 
 void unlockDoor() {
-   // Unlock animation
+  // Unlock animation and door unlocking
   Serial.println(" Unlocking door...");
-  for (int i = 1; i <= 3; i++) {
-    tft.fillScreen(BLACK);
-    tft.setCursor(10, 30);
-    tft.print("Unlocking\n");
-    for (int j = 0; j < i; j++) tft.print(".");
-    Serial.print("Unlocking\n");
-    for (int j = 0; j < i; j++) Serial.print(".");
-    Serial.println();
-    delay(500);
-  }
+  digitalWrite(RELAY_PIN, HIGH); // Unlock the door
+
   Serial.println(" Door unlocked.");
   tft.fillScreen(GREEN);
   tft.setCursor(0, 0);
   tft.println(" \n\n Door\n Unlocked");
-  Serial.println(" Door Unlocked.");
-  delay(2000);
-  digitalWrite(RELAY_PIN, HIGH); // Unlock the door
-  delay(UNLOCK_TIME * 1000);    // Keep unlocked for the set duration
-  
-  // Lock animation
+
+  // Wait for UNLOCK_TIME before locking the door
+  delay(UNLOCK_TIME * 1000); // UNLOCK_TIME-second delay
+
+  // Lock animation and door locking
   Serial.println("Locking door...");
-  for (int i = 1; i <= 3; i++) {
-    tft.fillScreen(BLACK);
-    tft.setCursor(10, 30);
-    tft.print("Locking\n");
-    for (int j = 0; j < i; j++) tft.print(".");
-    //Serial.print(" Locking");
-    for (int j = 0; j < i; j++) Serial.print(".");
-    Serial.println();
-    delay(500);
-  }
   digitalWrite(RELAY_PIN, LOW); // Relock the door
-  delay(2000);
-  tft.fillScreen(RED);
+
+  tft.fillScreen(BLUE);
   tft.setCursor(0, 0);
   tft.println(" \n\n Door\n Locked");
   Serial.println(" Door locked.");
-  delay(2000);
+  delay(2000); // Additional UI display time
 }
+
+
