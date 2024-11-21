@@ -6,7 +6,7 @@ If both pass, it unlocks for a defined amount of time.
 
 Author: Alex Jain <ajain@pdx.edu>, Anthony Le <anthle@pdx.edu>  
 Date: Nov 19th, 2024  
-Version: 0.4  
+Version: 0.5  
 
 Necessary Libraries:  
 1. Adafruit Fingerprint Sensor Library: https://github.com/adafruit/Adafruit-Fingerprint-Sensor-Library  
@@ -112,15 +112,28 @@ void setup() {
   }
   delay(1000); // Additional delay before moving on
 
-  // Display fingerprint image
-  tft.fillScreen(BLACK);
-  tft.setTextSize(1);
-  tft.setCursor(10, 30);
-  tft.println("Initializing");
-  tft.setCursor(10, 50);
-  tft.println("Fingerprint Sensor...");
-  delay(1000);
+  // Initialize RFID reader
+  SPI.begin();
+  rfid.PCD_Init();
 
+  // Display fingerprint image w/ animation
+  for (int i = 1; i <= 3; i++) {
+    tft.fillScreen(BLACK); // Clear the screen for each frame
+    tft.setCursor(10, 30);
+    tft.println("Fingerprint Sensor\n\n And RFID Scanner");
+
+    // Add dots based on the current iteration
+    if (i == 1) {
+      tft.println("\n Initializing.");
+    } else if (i == 2) {
+      tft.println("\n Initializing..");
+    } else if (i == 3) {
+      tft.println("\n Initializing...");
+    }
+    delay(800); // Wait for 1 second per frame
+  }
+  delay(1000); // Additional delay before moving on
+  
   // Just for fun if we can get it to work
   // Draw the fingerprint image (use a 128x128 bitmap)
   // tft.drawBitmap(0, 0, fingerprintBitmap, 128, 128, WHITE); // Centered on display
@@ -140,10 +153,6 @@ void setup() {
   // Display startup message
   tft.println(" \n\n Access\n Control\n System");
   delay(2000);
-
-  // Initialize RFID reader
-  SPI.begin();
-  rfid.PCD_Init();
 
   // Initialize fingerprint sensor
   if (finger.verifyPassword()) {
@@ -172,6 +181,12 @@ void loop() {
       tft.fillScreen(GREEN);
       tft.setCursor(0, 0);
       tft.println(" \n\n RFID \n Valid\n ");
+      Serial.print("Access Granted, UID:");
+      for (int i = 0; i < rfid.uid.size; i++) {
+        Serial.print(rfid.uid.uidByte[i] < 0x10 ? " 0" : " ");
+        Serial.print(rfid.uid.uidByte[i], HEX);
+      }
+      Serial.println();
       delay(2000);
       tft.fillScreen(BLACK);
       tft.setCursor(0, 0);
@@ -200,6 +215,12 @@ void loop() {
       tft.fillScreen(RED);
       tft.setCursor(0, 0);
       tft.println(" \n\n RFID\n Denied");
+      Serial.print("Access denied, UID:");
+      for (int i = 0; i < rfid.uid.size; i++) {
+        Serial.print(rfid.uid.uidByte[i] < 0x10 ? " 0" : " ");
+        Serial.print(rfid.uid.uidByte[i], HEX);
+      }
+      Serial.println();
       delay(2000);
     }
     rfid.PICC_HaltA();
@@ -237,11 +258,38 @@ int getFingerprintID() {
 }
 
 void unlockDoor() {
+   // Unlock animation
+  Serial.println("Unlocking door...");
+  for (int i = 1; i <= 3; i++) {
+    tft.fillScreen(BLACK);
+    tft.setCursor(10, 30);
+    tft.print("Unlocking");
+    for (int j = 0; j < i; j++) tft.print(".");
+    Serial.print("Unlocking");
+    for (int j = 0; j < i; j++) Serial.print(".");
+    Serial.println();
+    delay(500);
+  }
   digitalWrite(RELAY_PIN, HIGH); // Unlock the door
-  // Displays message opening 
-  delay(2000);
-  tft.println(" Unlocking \n ");
-  tft.fillScreen(BLACK);
   delay(UNLOCK_TIME * 1000);    // Keep unlocked for the set duration
+  
+  // Lock animation
+  Serial.println("Locking door...");
+  for (int i = 1; i <= 3; i++) {
+    tft.fillScreen(BLACK);
+    tft.setCursor(10, 30);
+    tft.print("Locking");
+    for (int j = 0; j < i; j++) tft.print(".");
+    Serial.print("Locking");
+    for (int j = 0; j < i; j++) Serial.print(".");
+    Serial.println();
+    delay(500);
+  }
   digitalWrite(RELAY_PIN, LOW); // Relock the door
+
+  tft.fillScreen(RED);
+  tft.setCursor(0, 0);
+  tft.println(" \n\n Door\n Locked");
+  Serial.println("Door locked.");
+  delay(2000);
 }
