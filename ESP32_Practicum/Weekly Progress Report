@@ -244,22 +244,52 @@ Report date: 11/27/24
 
 - ## Last Week (Times in Hours)
     - Team Review
+        - Discussed potential test plans
+        - Ran minor software checks to ensure things worked
+        - Cleaned up Git Page
+        - Picked up PCB's from EPL and inspected for any major damages
+        - Confirmed Box 3D model
     - Team Member 1 - Felix Moss
+        - Inspected PCBs (1)
     - Team Member 2 - Alex Jain
+        - Minor software checks (1)
     - Team Member 3 - Davyd Gamza
+        - Inspected PCBs (1)
+        - Completed 3D box model (2)
     - Team Member 4 - Anthony Le
+        - Minor software checks (1)
+        - Group BOM (1)
 - ## Next Week
     - Team Plan
-    - Team Member 1 - Felix Moss    
+        - Solder all parts onto PCB
+        - Run diagnostics
+        - Record all tests using templates
+        - Print final box
+    - Team Member 1 - Felix Moss
+        - Solder PCB (5)
+        - Run diagnostics (5)
+        - Record using templates (5)
     - Team Member 2 - Alex Jain
+        - Solder PCB (5)
+        - Run diagnostics (5)
     - Team Member 3 - Davyd Gamza
+        - Solder PCB (5)
+        - Run diagnostics (5)
+        - Print box (2)
     - Team Member 4 - Anthony Le
+        - Solder PCB (5)
+        - Run diagnostics (5)
 -  ## Blocked
     - Team Blocks
+        - Not much was completed this week as we were all waiting for PCB's to arrive. 
     - Team Member 1 - Felix Moss
+        - Waiting on PCB
     - Team Member 2 - Alex Jain
+        - Waiting on PCB
     - Team Member 3 - Davyd Gamza
+        - Waiting on PCB
     - Team Member 4 - Anthony Le
+        - Waiting on PCB
 
 
 # Lockbox Week 10 Progress Report
