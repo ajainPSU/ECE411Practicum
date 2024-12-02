@@ -37,7 +37,7 @@
 #define YELLOW  0xFFE0
 #define WHITE   0xFFFF
 
-#define TIME 5  // Delay time in seconds
+#define TIME 2  // Delay time in seconds
 
 // Create a TFT display object using the defined pin connections
 TFT_ILI9163C tft(__CS, __DC, A0);
