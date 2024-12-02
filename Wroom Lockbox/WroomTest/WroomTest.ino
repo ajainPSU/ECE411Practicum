@@ -13,6 +13,8 @@
 #define LED_BUILTIN 2 // Replace to whatever the onboard LED Pin is
 
 void setup() {
+  // Start the Serial Monitor for debugging and user interaction
+  Serial.begin(9600);
   pinMode(LED_BUILTIN, OUTPUT);
 }
 
