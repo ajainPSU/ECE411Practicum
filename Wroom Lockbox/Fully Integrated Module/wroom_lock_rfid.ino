@@ -5,8 +5,8 @@ Checks RFID tag first, followed by fingerprint matching.
 If both pass, it unlocks for a defined amount of time.  
 
 Author: Alex Jain <ajain@pdx.edu>, Anthony Le <anthle@pdx.edu>  
-Date: Nov 19th, 2024  
-Version: 0.5  
+Date: Dec 2nd, 2024  
+Version: 0.6  
 
 Necessary Libraries:  
 1. Adafruit Fingerprint Sensor Library: https://github.com/adafruit/Adafruit-Fingerprint-Sensor-Library  
@@ -213,7 +213,7 @@ void loop() {
         // Fingerprint mismatch
         tft.fillScreen(RED);
         tft.setCursor(0, 0);
-        tft.println(" \n\n Finger\n No Match");
+        tft.println(" \n\n Finger\n Does Not\n Match");
         delay(2000);
       }
     } else {
@@ -265,26 +265,24 @@ int getFingerprintID() {
 
 void unlockDoor() {
   // Unlock animation and door unlocking
-  Serial.println(" Unlocking door...");
+  Serial.println(" Unlocking...");
   digitalWrite(RELAY_PIN, HIGH); // Unlock the door
 
-  Serial.println(" Door unlocked.");
+  Serial.println(" Unlocked.");
   tft.fillScreen(GREEN);
   tft.setCursor(0, 0);
-  tft.println(" \n\n Door\n Unlocked");
+  tft.println(" \n\n Unlocked");
 
   // Wait for UNLOCK_TIME before locking the door
   delay(UNLOCK_TIME * 1000); // UNLOCK_TIME-second delay
 
   // Lock animation and door locking
-  Serial.println("Locking door...");
+  Serial.println("Locking...");
   digitalWrite(RELAY_PIN, LOW); // Relock the door
 
   tft.fillScreen(BLUE);
   tft.setCursor(0, 0);
-  tft.println(" \n\n Door\n Locked");
-  Serial.println(" Door locked.");
+  tft.println(" \n\n Locked");
+  Serial.println(" Locked.");
   delay(2000); // Additional UI display time
 }
-
-
