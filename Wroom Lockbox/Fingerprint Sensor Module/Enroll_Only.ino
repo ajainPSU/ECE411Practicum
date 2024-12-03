@@ -1,18 +1,26 @@
-/***************************************************
-  Adafruit Fingerprint Sensor Enrollment Example
-  for ESP32 WROOM (using HardwareSerial with custom RX/TX pins)
+/*  
+ESP32 WROOM - Adafruit Fingerprint Sensor Enrollment Example  
+Demonstrates how to enroll a fingerprint using the Adafruit  
+Fingerprint Sensor and the ESP32 WROOM with custom RX/TX pins.  
 
-  This code demonstrates how to enroll a fingerprint 
-  in the Adafruit Fingerprint Sensor using the ESP32 WROOM 
-  board with the Adafruit_Fingerprint library.
+Author: Anthony Le <anthle@pdx.edu>  
+Date: Dec 3rd, 2024  
+Version: 1.0  
 
-  Wiring:
-  - TX of Fingerprint sensor to RX (GPIO16) on ESP32
-  - RX of Fingerprint sensor to TX (GPIO17) on ESP32
+Necessary Libraries:  
+1. Adafruit Fingerprint Sensor Library: https://github.com/adafruit/Adafruit-Fingerprint-Sensor-Library  
 
-  Written by [Your Name], [Date]
-  BSD license, all text above must be included in any redistribution
- ***************************************************/
+Hardware Requirements:  
+1. ESP32 WROOM/Feather Dev Module  
+2. Adafruit Fingerprint Sensor (UART-based)  
+
+Wiring:  
+1. TX of Fingerprint Sensor -> RX (GPIO16) on ESP32  
+2. RX of Fingerprint Sensor -> TX (GPIO17) on ESP32  
+
+Note: Ensure pin connections match the wiring diagram in the code comments.  
+BSD license: All text above must be included in any redistribution.  
+*/
 
 // Include the necessary libraries for fingerprint sensor
 #include <Adafruit_Fingerprint.h>
